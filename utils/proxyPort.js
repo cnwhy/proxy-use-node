@@ -2,12 +2,23 @@
 const net = require('net');
 const dgram = require('dgram');
 
+/**
+ * TCP和UDP端口转发
+ * @param {number} srcPort 本地端口
+ * @param {string} destServer 要转发的服务器
+ * @param {number} destPort 要代理的端口
+ */
 function proxyPort(srcPort, destServer, destPort) {
     proxyPortTCP(srcPort, destServer, destPort);
     proxyPortUDP(srcPort, destServer, destPort);
 }
 
-// tcp端口转发
+/**
+ * tcp端口转发
+ * @param {number} srcPort 本地端口
+ * @param {string} destServer 要转发的服务器
+ * @param {number} destPort 要代理的端口
+ */
 function proxyPortTCP(srcPort, destServer, destPort) {
     const tcpServer = net.createServer(function (cSock) {
         proxyClientTCP(cSock, destServer, destPort)
@@ -17,7 +28,12 @@ function proxyPortTCP(srcPort, destServer, destPort) {
     });
 }
 
-// udp端口转发
+/**
+ * udp端口转发
+ * @param {*} srcPort 本地端口
+ * @param {*} destServer 要转发的服务器
+ * @param {*} destPort 要代理的端口
+ */
 function proxyPortUDP(srcPort, destServer, destPort) {
     const udpServer = dgram.createSocket('udp4').on('error', (err) => {
         console.log('udp server err', err)
@@ -61,6 +77,8 @@ function proxyClientTCP(server, destServer, destport) {
 
 module.exports = {
     proxyPort,
+    proxyPortTCP,
+    proxyPortUDP,
     proxyClientTCP,
     proxyClientUDP,
 }
